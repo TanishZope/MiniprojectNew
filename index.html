@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* ============================================================
-       STYLES (unchanged from previous version)
+       STYLES (unchanged, kept compact)
     ============================================================ */
     * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', system-ui, sans-serif; }
     body { min-height:100vh; background:radial-gradient(circle at 20% 20%, #0b1c2f, #03070e); color:#f0f9ff; padding:0 20px; display:flex; flex-direction:column; align-items:center; }
@@ -172,6 +172,17 @@
     .search-result-list .s-book-btn { margin-top:18px; padding:12px 32px; border:none; border-radius:30px; background:linear-gradient(135deg, #00b894, #00a381); color:white; font-weight:600; font-size:15px; cursor:pointer; transition:0.2s; box-shadow:0 4px 12px rgba(0,180,100,0.2); }
     .search-result-list .s-book-btn:hover { transform:scale(1.03); box-shadow:0 6px 18px rgba(0,180,100,0.3); }
 
+    /* ============================================================
+       CENTERED BUTTON CONTAINERS (Queue & Status Board)
+    ============================================================ */
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
     @media(max-width:1024px) {
       .search-fields { grid-template-columns:1fr 1fr 1fr; }
       .search-btn { grid-column:span 3; justify-content:center; }
@@ -203,6 +214,7 @@
       .stop-item .stop-fields { grid-template-columns:1fr; }
       .results-header { flex-direction:column; align-items:stretch; }
       .results-header .sort-options { justify-content:center; }
+      .action-buttons { justify-content:center; }
     }
   </style>
 </head>
@@ -391,7 +403,8 @@
     <!-- QUEUE SECTION -->
     <section class="section glass" id="queue">
       <h2><i class="fas fa-hourglass-half"></i> Digital Check-In Queue</h2>
-      <div style="display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px;">
+      <!-- Centered button container -->
+      <div class="action-buttons">
         <button onclick="displayQueue()"><i class="fas fa-eye"></i> View Queue</button>
         <button onclick="processBoarding()"><i class="fas fa-person-walking"></i> Process Boarding</button>
         <button onclick="addPriorityTest()"><i class="fas fa-star"></i> Add Priority Test</button>
@@ -412,7 +425,8 @@
     <!-- LIVE STATUS BOARD -->
     <section class="section glass" id="status">
       <h2><i class="fas fa-satellite-dish"></i> Live Flight Status Board</h2>
-      <div style="display:flex;gap:15px;flex-wrap:wrap;margin-bottom:15px;">
+      <!-- Centered button container -->
+      <div class="action-buttons">
         <button onclick="refreshStatusBoard()"><i class="fas fa-sync"></i> Refresh Status</button>
         <button onclick="simulateDelay()"><i class="fas fa-clock"></i> Simulate Delay</button>
         <button onclick="simulateCancellation()"><i class="fas fa-times-circle"></i> Simulate Cancellation</button>
@@ -944,7 +958,7 @@
         `;
         document.getElementById('flightCount').textContent = '0';
         currentResults = [];
-        refreshStatusBoard(); // show "no flights" message
+        refreshStatusBoard();
         return;
       }
 
@@ -963,7 +977,7 @@
 
       currentResults = filtered;
       renderFlights(filtered);
-      refreshStatusBoard(); // update status board with current results
+      refreshStatusBoard();
     }
 
     // =============================================================
@@ -1198,7 +1212,7 @@
       toggleStopSection(false);
 
       if (searchPerformed) performSearch();
-      else refreshStatusBoard(); // if no search, just show empty status
+      else refreshStatusBoard();
     }
 
     // =============================================================
@@ -1402,7 +1416,7 @@
     }
 
     // =============================================================
-    // LIVE STATUS BOARD (shows current results only)
+    // LIVE STATUS BOARD
     // =============================================================
     function refreshStatusBoard() {
       const board = document.getElementById('statusBoard');
@@ -1412,7 +1426,6 @@
         return;
       }
 
-      // Use current results (up to 12 flights)
       const flights = currentResults.slice(0, 12);
 
       board.innerHTML = `
@@ -1592,9 +1605,9 @@
     document.getElementById('searchTo').addEventListener('keyup', e => { if (e.key === 'Enter') performSearch(); });
 
     // =============================================================
-    // INIT - No default search
+    // INIT
     // =============================================================
-    refreshStatusBoard(); // shows "No flights to display"
+    refreshStatusBoard();
     displayQueue();
   </script>
 </body>
